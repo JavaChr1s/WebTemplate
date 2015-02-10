@@ -20,7 +20,7 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<start-class>de.animalFriends.AnimalFriendsApplication</start-class>
+		<start-class>de.webtemplate.WebTemplateApplication</start-class>
 		<java.version>1.8</java.version>
 	</properties>
 	
