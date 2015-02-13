@@ -1,20 +1,16 @@
 package de.webtemplate;
 
-import java.io.File;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
+import org.apache.solr.client.solrj.SolrServer;
+import org.apache.solr.client.solrj.impl.HttpSolrServer;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.context.embedded.ConfigurableEmbeddedServletContainer;
-import org.springframework.boot.context.embedded.EmbeddedServletContainerCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.solr.core.SolrTemplate;
+import org.springframework.data.solr.repository.config.EnableSolrRepositories;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
-
-import de.webtemplate.dao.ExampleDAO;
 
 /**
  * Created for project webTemplate
@@ -26,16 +22,15 @@ import de.webtemplate.dao.ExampleDAO;
 @ComponentScan
 @Configuration
 @EnableAutoConfiguration
-public class WebTemplateApplication implements EmbeddedServletContainerCustomizer {
+@EnableSolrRepositories("com.webtemplate.solr.repository")
+public class WebTemplateApplication
+{
 
-	@Value("${webroot.directory}")
-    private String documentRoot;
-	
-    public static void main(String[] args) {
-        SpringApplication.run(WebTemplateApplication.class, args);
-    }
-    
-    @Bean
+	public static void main(String[] args) {
+		SpringApplication.run(WebTemplateApplication.class, args);
+	}
+
+	@Bean
 	public InternalResourceViewResolver setupViewResolver() {
 		final InternalResourceViewResolver resolver = new InternalResourceViewResolver();
 		resolver.setPrefix("/WEB-INF/views/");
@@ -43,8 +38,14 @@ public class WebTemplateApplication implements EmbeddedServletContainerCustomize
 		return resolver;
 	}
 
-	@Override
-	public void customize(final ConfigurableEmbeddedServletContainer container) {
-		container.setDocumentRoot(new File(documentRoot));
+	@Bean
+	public SolrServer solrServer() {
+//		return new EmbeddedSolrServerFactoryBean().
+		return new HttpSolrServer("http://localhost:8983/solr");
+	}
+
+	@Bean
+	public SolrTemplate solrTemplate(SolrServer server) throws Exception {
+		return new SolrTemplate(server);
 	}
 }
