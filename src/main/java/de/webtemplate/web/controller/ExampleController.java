@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import de.webtemplate.dao.ExampleDAO;
-import de.webtemplate.entity.Example;
 
 /**
  * Created for project webTemplate
