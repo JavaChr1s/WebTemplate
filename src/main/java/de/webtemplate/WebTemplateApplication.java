@@ -10,6 +10,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.solr.core.SolrTemplate;
 import org.springframework.data.solr.repository.config.EnableSolrRepositories;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 /**
@@ -22,7 +23,8 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
 @ComponentScan
 @Configuration
 @EnableAutoConfiguration
-@EnableSolrRepositories("com.webtemplate.solr.repository")
+@EnableScheduling
+@EnableSolrRepositories("de.webtemplate.solr.repository")
 public class WebTemplateApplication
 {
 
@@ -40,12 +42,11 @@ public class WebTemplateApplication
 
 	@Bean
 	public SolrServer solrServer() {
-//		return new EmbeddedSolrServerFactoryBean().
 		return new HttpSolrServer("http://localhost:8983/solr");
 	}
 
 	@Bean
-	public SolrTemplate solrTemplate(SolrServer server) throws Exception {
+	public SolrTemplate solrTemplate(final SolrServer server) throws Exception {
 		return new SolrTemplate(server);
 	}
 }
