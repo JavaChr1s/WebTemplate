@@ -44,4 +44,5 @@ Temporary Items
 
 # Custom
 target
-bin
+solr/logs/**
+solr/multicore/**/data
